@@ -1,13 +1,18 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { Home } from './pages'
+import { Home, Login, Signup, Dashboard } from './pages'
+import Layout from './components/Layout';
 // import './App.css';
 
 function App() {
   return (
     <BrowserRouter>
-      <Routes>
-        <Route path='/' element={<Home />} />
-      </Routes>
+      <Layout>
+        <Routes>
+          <Route path='/' element={<Dashboard />} />
+          <Route path='/login' element={<Login />} />
+          <Route path='/signup' element={<Signup />} />
+        </Routes>
+      </Layout>
     </BrowserRouter>
   );
 }
