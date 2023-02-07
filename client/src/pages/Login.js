@@ -7,9 +7,9 @@ import {
 
 import CloseIcon from '@mui/icons-material/Close';
 
-import { ReactComponent as ShortUrlLarge } from '../media/short-url.svg';
 import { loginUser } from '../helpers/helpers';
 import { NavLink, useNavigate } from 'react-router-dom';
+import { LogoLarge } from '../components/Logo';
 
 export function Login({ handleUser }) {
   const history = useNavigate();
@@ -29,7 +29,7 @@ export function Login({ handleUser }) {
     loginUser(user).then(res => {
       if (res.isAuth) {
         handleUser(res);
-        history('/admin');
+        history('/');
       } else {
         setErrorMsg(res.message);
         setEmail('');
@@ -58,7 +58,7 @@ export function Login({ handleUser }) {
           alignItems: 'center',
         }}
       >
-        <ShortUrlLarge />
+        <LogoLarge />
         <Typography component="h1" variant="h5" sx={{ my: 2 }}>
           Sign in to your Short URL account
         </Typography>
@@ -67,6 +67,7 @@ export function Login({ handleUser }) {
           <Collapse in={errorMsg.length !== 0}>
             <Alert
               severity='error'
+              variant='outlined'
               action={
                 <IconButton
                   aria-label="close"

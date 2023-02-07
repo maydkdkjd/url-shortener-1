@@ -22,9 +22,10 @@ const Layout = ({ children, user, handleLogout }) => {
       <CssBaseline />
         <Navigation user={user} logoutUser={handleLogout} />
         <Box component='main' className='main-component-wrapper' sx={{
-          py: 4,
-          minHeight: 'calc(100vh - 64px)',
-          bgcolor: 'whitesmoke'
+          pt: 12,
+          pb: 4,
+          minHeight: '100vh',
+          bgcolor: '#eceef4'
         }}>
           {children}
         </Box>

@@ -54,7 +54,7 @@ const UrlRow = ({ url, shortUrl, lastModified, deleteUrl, updateUrl }) => {
           {`http://localhost:5000/u/${shortUrl}`}
         </Link>
       </TableCell>
-      <TableCell align="center">
+      <TableCell sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'center' }} align="center">
         {!edit ? (
           <Button title="Edit URL" onClick={toggleEdit}>
             <EditIcon />
@@ -76,7 +76,7 @@ const UrlRow = ({ url, shortUrl, lastModified, deleteUrl, updateUrl }) => {
   )
 }
 
-const Dashboard = () => {
+const Dashboard = ({ user }) => {
   const [url, setUrl] = useState('');
   const [rows, setRows] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -85,7 +85,8 @@ const Dashboard = () => {
     e.preventDefault();
     fetch('http://localhost:5000/urls/add', {
       method: "POST",
-      body: JSON.stringify({ targetUrl: url }),
+      credentials: "include",
+      body: JSON.stringify({ targetUrl: url, uid: user._id }),
       headers: {
         'Content-Type': 'application/json'
       },
@@ -102,7 +103,10 @@ const Dashboard = () => {
   }
 
   const fetchUrls = () => {
-    fetch('http://localhost:5000/urls')
+    fetch('http://localhost:5000/urls', {
+      method: 'GET',
+      credentials: 'include'
+    })
       .then(res => res.json())
       .then(jsonRes => {
         console.log(jsonRes);
@@ -117,7 +121,11 @@ const Dashboard = () => {
   const updateUrl = (shortUrl, url) =>
     fetch(`http://localhost:5000/urls/update`, {
       method: 'POST',
-      body: JSON.stringify({ shortUrl: shortUrl, url: url }),
+      body: JSON.stringify({ 
+        shortUrl: shortUrl, 
+        url: url, 
+      }),
+      credentials: 'include',
       headers: {
         'Content-Type': 'application/json'
       },
@@ -134,6 +142,7 @@ const Dashboard = () => {
     fetch(`http://localhost:5000/urls/delete`, {
       method: 'POST',
       body: JSON.stringify({ shortUrl: shortUrl }),
+      credentials: 'include',
       headers: {
         'Content-Type': 'application/json'
       },
@@ -156,10 +165,10 @@ const Dashboard = () => {
     <Box>
       <Container maxWidth="lg">
         <Typography variant="h3" component="h1" >
-          Welcome, User
+          Welcome, {user.firstName}
         </Typography>
 
-        <Paper variant="elevation" sx={{ p: 4, margin: 'auto', my: 4 }} component="form" onSubmit={handleSubmit}>
+        <Paper variant="elevation" sx={{ p: 4, margin: 'auto', my: 4, bgcolor: '#f6f8fa' }} component="form" onSubmit={handleSubmit}>
           <Typography variant="h6" component="h2" fontFamily={'monospace'} fontWeight={700} mb={2}>
             Shorten a URL
           </Typography>
@@ -179,7 +188,7 @@ const Dashboard = () => {
           </Button>
         </Paper>
 
-        <Paper variant="elevation" sx={{ p: 4, my: 4, bgcolor: "lightblue" }}>
+        <Paper variant="elevation" sx={{ p: 4, my: 4 }}>
           <Typography variant="h6" component="h2" fontFamily={'monospace'} fontWeight={700} mb={2}>
             Your Short URLs
           </Typography>
@@ -187,10 +196,10 @@ const Dashboard = () => {
             <Table sx={{ minWidth: 650 }} aria-label="simple table">
               <TableHead>
                 <TableRow>
-                  <TableCell align="left">Last Modified</TableCell>
-                  <TableCell align="left">URL</TableCell>
-                  <TableCell align="left">Short URL</TableCell>
-                  <TableCell align="center" width="200px">Manage</TableCell>
+                  <TableCell sx={{ fontWeight: 700, fontFamily: 'monospace', color: '#333' }} align="left">Last Modified</TableCell>
+                  <TableCell sx={{ fontWeight: 700, fontFamily: 'monospace', color: '#333' }} align="left">URL</TableCell>
+                  <TableCell sx={{ fontWeight: 700, fontFamily: 'monospace', color: '#333' }} align="left">Short URL</TableCell>
+                  <TableCell sx={{ fontWeight: 700, fontFamily: 'monospace', color: '#333' }} align="center" width="200px">Manage</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
