@@ -79,7 +79,6 @@ const UrlRow = ({ url, shortUrl, lastModified, deleteUrl, updateUrl }) => {
 const Dashboard = ({ user }) => {
   const [url, setUrl] = useState('');
   const [rows, setRows] = useState([]);
-  const [loading, setLoading] = useState(false);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -95,7 +94,6 @@ const Dashboard = ({ user }) => {
         if (resJson) {
           setUrl('');
           fetchUrls();
-          console.log(resJson);
         }
       }).catch(err => {
         console.log(err);
@@ -109,9 +107,7 @@ const Dashboard = ({ user }) => {
     })
       .then(res => res.json())
       .then(jsonRes => {
-        console.log(jsonRes);
         setRows(jsonRes);
-        setLoading(false);
       })
       .catch(err => {
         console.log(err);
@@ -131,7 +127,6 @@ const Dashboard = ({ user }) => {
       },
     }).then(res => res.json())
       .then(jsonRes => {
-        console.log(jsonRes);
         fetchUrls();
       })
       .catch(err => {
@@ -149,7 +144,6 @@ const Dashboard = ({ user }) => {
     })
       .then(res => res.json())
       .then(jsonRes => {
-        console.log(jsonRes);
         fetchUrls();
       })
       .catch(err => {

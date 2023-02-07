@@ -1,5 +1,5 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { Home, Login, Signup, Dashboard } from './pages'
+import { Login, Signup, Dashboard } from './pages'
 import Layout from './components/Layout';
 import { useState, useEffect } from 'react';
 import { checkAuth } from './helpers/helpers';

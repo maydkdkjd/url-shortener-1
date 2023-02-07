@@ -1,7 +1,8 @@
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const { getDb } = require('./conn');
-const SECRET = 'secret' || process.env.JWT_SECRET;
+const SECRET = process.env.JWT_SECRET;
+// const SECRET = 'secret' || process.env.JWT_SECRET;
 
 /** 
  * Insert new user if email doesn't exist

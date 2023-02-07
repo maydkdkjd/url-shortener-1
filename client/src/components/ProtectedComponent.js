@@ -1,4 +1,3 @@
-import { Typography } from '@mui/material';
 import { Box, Container } from '@mui/system';
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';

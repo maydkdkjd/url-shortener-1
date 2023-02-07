@@ -19,7 +19,6 @@ const Home = () => {
         if (resJson) {
           setUrl('')
           setShortUrl(resJson.shortUrl)
-          console.log(resJson);
         }
       }).catch(err => {
         console.log(err);
