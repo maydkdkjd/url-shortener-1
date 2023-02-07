@@ -186,27 +186,34 @@ const Dashboard = ({ user }) => {
           <Typography variant="h6" component="h2" fontFamily={'monospace'} fontWeight={700} mb={2}>
             Your Short URLs
           </Typography>
-          <TableContainer>
-            <Table sx={{ minWidth: 650 }} aria-label="simple table">
-              <TableHead>
-                <TableRow>
-                  <TableCell sx={{ fontWeight: 700, fontFamily: 'monospace', color: '#333' }} align="left">Last Modified</TableCell>
-                  <TableCell sx={{ fontWeight: 700, fontFamily: 'monospace', color: '#333' }} align="left">URL</TableCell>
-                  <TableCell sx={{ fontWeight: 700, fontFamily: 'monospace', color: '#333' }} align="left">Short URL</TableCell>
-                  <TableCell sx={{ fontWeight: 700, fontFamily: 'monospace', color: '#333' }} align="center" width="200px">Manage</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {rows.map(row => (
-                  <UrlRow {...row} key={row.shortUrl}
-                    deleteUrl={deleteUrl}
-                    updateUrl={updateUrl}
-                  />
-                ))}
-              </TableBody>
 
-            </Table>
-          </TableContainer>
+          {rows.length ? (
+            <TableContainer>
+              <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                <TableHead>
+                  <TableRow>
+                    <TableCell sx={{ fontWeight: 700, fontFamily: 'monospace', color: '#333' }} align="left">Last Modified</TableCell>
+                    <TableCell sx={{ fontWeight: 700, fontFamily: 'monospace', color: '#333' }} align="left">URL</TableCell>
+                    <TableCell sx={{ fontWeight: 700, fontFamily: 'monospace', color: '#333' }} align="left">Short URL</TableCell>
+                    <TableCell sx={{ fontWeight: 700, fontFamily: 'monospace', color: '#333' }} align="center" width="200px">Manage</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {rows.map(row => (
+                    <UrlRow {...row} key={row.shortUrl}
+                      deleteUrl={deleteUrl}
+                      updateUrl={updateUrl}
+                    />
+                  ))}
+                </TableBody>
+
+              </Table>
+            </TableContainer>
+          ) : (
+            <Typography variant="body2">
+              Nothing here yet. Your shortened URLs will appear here
+            </Typography>
+          )}
         </Paper>
       </Container>
     </Box>
