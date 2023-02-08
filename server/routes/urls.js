@@ -38,22 +38,15 @@ record.route('/urls/add').post(function (req, res) {
 
 })
 
-record.route('/urls').get((req, res) => {
-  const auth = req.cookies.auth;
-  
-  findUserByToken(auth, (err, user) => {
-    if (err) return res.json(err);
-    if (!user) return res.status(401);
-
-    dbo.getDb().collection('urls').find({ uid: user.userId })
-    .sort({lastModified: -1})
-    .toArray()
-    .then(result => {
-      res.json(result);
-    })
-    .catch(err => {
-      throw err;
-    })
+record.route('/urls/:id').get((req, res) => {
+  dbo.getDb().collection('urls').find({ uid: req.params.id })
+  .sort({lastModified: -1})
+  .toArray()
+  .then(result => {
+    res.json(result);
+  })
+  .catch(err => {
+    throw err;
   })
 })
 
