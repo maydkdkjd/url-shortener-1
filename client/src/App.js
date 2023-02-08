@@ -17,7 +17,8 @@ function App() {
     const user = {
       id: localStorage.getItem('userId'),
       email: localStorage.getItem('userEmail'),
-      name: localStorage.getItem('userName')
+      firstName: localStorage.getItem('firstName'),
+      lastName: localStorage.getItem('lastName'),
     }
     setUser(user);
     checkAuth().then(res => {
@@ -25,7 +26,8 @@ function App() {
         setUser(null);
         localStorage.removeItem('userId');
         localStorage.removeItem('userEmail');
-        localStorage.removeItem('userName');
+        localStorage.removeItem('firstName');
+        localStorage.removeItem('lastName');
       };
     })
   }, [])
@@ -34,7 +36,8 @@ function App() {
     setUser(user);
     localStorage.setItem('userId', user.id);
     localStorage.setItem('userEmail', user.email);
-    localStorage.setItem('userName', user.name);
+    localStorage.setItem('firstName', user.firstName);
+    localStorage.setItem('lastName', user.lastName);
   }
 
   const logoutUser = () => {
@@ -53,7 +56,8 @@ function App() {
         setUser(null);
         localStorage.removeItem('userId');
         localStorage.removeItem('userEmail');
-        localStorage.removeItem('userName');
+        localStorage.removeItem('firstName');
+        localStorage.removeItem('lastName');
       })
   }
 
