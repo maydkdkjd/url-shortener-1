@@ -1,4 +1,5 @@
 const express = require('express');
+const path = require('path');
 const record = express.Router();
 const crypto = require('crypto');
 const dbo = require('../conn');
@@ -104,7 +105,9 @@ record.route('/u/:id').get((req, res) => {
     if (result) {
       res.redirect(302, result.url);
     } else {
-      res.status(404).json({err: 'Not found'});
+      res.status(404).render('../static/notfound.ejs', {url: req.params.id});
+      // res.sendFile( path.join(__dirname, '../static/notfound.html'));
+      // res.status(404).json({err: 'Not found'});
     }
   })
 })
