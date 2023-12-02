@@ -12,7 +12,7 @@ app.use(cookies());
 app.use(express.json());
 // middlewares for handling routes
 app.use(cors({
-  origin: ['http://localhost:3000', 'http://localhost:3001'],
+  origin: process.env.ALLOWED_CROSS_ORIGINS.split(' '),
   credentials: true
 }))
 app.use(require('./routes/urls'));
