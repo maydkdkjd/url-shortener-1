@@ -37,9 +37,9 @@ users.route('/users/login').post((req, res) => {
 
       bcrypt.compare(req.body.password, user.password)
         .then(isMatch => {
-          if (!isMatch) return res.status(400).json({ 
-            isAuth: false, 
-            message: "User ID or password is incorrect" 
+          if (!isMatch) return res.status(400).json({
+            isAuth: false,
+            message: "User ID or password is incorrect"
           });
 
           // generate token
@@ -67,10 +67,10 @@ users.route('/users/logout').get((req, res) => {
     if (!driver) return res.status(400).json({ error: true });
 
     getDb().collection('logged_in_users').deleteOne({ token: token })
-    .then(() => {
-      res.cookie('auth', '', { expires: new Date(0) }).sendStatus(200);
-    })
-    .catch(err => { res.sendStatus(400).json(err); })
+      .then(() => {
+        res.cookie('auth', '', { expires: new Date(0) }).sendStatus(200);
+      })
+      .catch(err => { res.sendStatus(400).json(err); })
   })
 })
 

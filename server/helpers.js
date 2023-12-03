@@ -9,33 +9,33 @@ const SECRET = process.env.JWT_SECRET;
  * @param {Object} user User object
  * @param {Response} res Response to client
  */
-const registerNewUser = (user, res) => 
+const registerNewUser = (user, res) =>
   getDb().collection('users').findOne({ email: user.email })
-  .then(result => {
-    if (result) return res.status(400).json({ auth: false, message: 'Email exists' });
+    .then(result => {
+      if (result) return res.status(400).json({ auth: false, message: 'Email exists' });
 
-    bcrypt.hash(user.password, 10).then(hashedPassword => {
-      const userDoc = {
-        firstName: user.firstName,
-        lastName: user.lastName,
-        email: user.email,
-        password: hashedPassword,
-      }
+      bcrypt.hash(user.password, 10).then(hashedPassword => {
+        const userDoc = {
+          firstName: user.firstName,
+          lastName: user.lastName,
+          email: user.email,
+          password: hashedPassword,
+        }
 
-      getDb().collection('users').insertOne(userDoc)
-      .then(result => {
-        console.log('New user signed up', result);
+        getDb().collection('users').insertOne(userDoc)
+          .then(result => {
+            console.log('New user signed up', result);
 
-        res.status(200).json({
-          success: true,
-          user: { userId: result.insertedId }
-        });
-      })
-      .catch(err => {
-        throw err;
+            res.status(200).json({
+              success: true,
+              user: { userId: result.insertedId }
+            });
+          })
+          .catch(err => {
+            throw err;
+          })
       })
     })
-  })
 
 /** 
  * @typedef {function(TypeError, import('mongodb').Document): void} Cb1
@@ -46,15 +46,24 @@ const registerNewUser = (user, res) =>
  * @param {Cb1} cb callback
  **/
 const findUserByToken = (token, cb) => {
-  if (!token) return cb(null, null);
+  if (!token) {
+    console.log('token is null')
+    return cb(null, null);
+  }
   jwt.verify(token, SECRET, (err, decode) => {
-    if (!decode) return cb(null, null);
+    if (!decode) {
+      console.log('decode is null');
+      return cb(null, null);
+    }
 
-    getDb().collection('logged_in_users').findOne({ 
-      userId: decode.id, token: token 
+    getDb().collection('logged_in_users').findOne({
+      userId: decode.id, token: token
     })
-    .then(user => cb(null, user))
-    .catch(err => cb(err));
+      .then(user => {
+        console.log('user by token: ', user);
+        return cb(null, user);
+      })
+      .catch(err => cb(err));
   })
 }
 
@@ -69,26 +78,28 @@ const generateToken = (user, res) => {
   const token = jwt.sign({ id: userId }, SECRET, { expiresIn: 60 * expiresInMin });
 
   let query = { userId: user._id.toHexString() };
-  let newValues = {$set: {
-    createdAt: new Date(),
-    userId: userId,
-    token: token
-  }}
+  let newValues = {
+    $set: {
+      createdAt: new Date(),
+      userId: userId,
+      token: token
+    }
+  }
 
-  getDb().collection('logged_in_users').updateOne(query, newValues, {upsert: true})
-  .then(result => {
-    return res.cookie('auth', token, { maxAge: expiresInMin * 60 * 1000 }).json({
-      isAuth: true, id: user._id, email: user.email, firstName: user.firstName, lastName: user.lastName
-    });
-  })
-  .catch(err => {
-    throw err;
-  })
+  getDb().collection('logged_in_users').updateOne(query, newValues, { upsert: true })
+    .then(result => {
+      return res.cookie('auth', token, { maxAge: expiresInMin * 60 * 1000 }).json({
+        isAuth: true, id: user._id, email: user.email, firstName: user.firstName, lastName: user.lastName
+      });
+    })
+    .catch(err => {
+      throw err;
+    })
 }
 
 
 module.exports = {
-  registerNewUser, 
-  findUserByToken, 
+  registerNewUser,
+  findUserByToken,
   generateToken
 };
