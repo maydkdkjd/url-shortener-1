@@ -1,18 +1,18 @@
 import { Box, Container } from '@mui/system';
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { checkAuth } from '../helpers/helpers';
 import { ReactComponent as Spinner } from '../media/spinner.svg'
+import useUser from '../contexts/user';
 
-const UnauthorizedComponent = () => (
+const LoadingScreen = () => (
   <Container maxWidth="lg">
     <Box sx={{ position: 'relative' }}>
-      <Box sx={{ 
-          position: 'absolute', 
-          top: '50%', 
-          left: '50%', 
-          transform: 'translate(-50%, -50%)',
-          mt: 8
+      <Box sx={{
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
+        mt: 8
       }} >
         <Spinner width={32} height={32} />
       </Box>
@@ -20,28 +20,40 @@ const UnauthorizedComponent = () => (
   </Container>
 );
 
-const ProtectedComponent = ({ children, userState, handleUserState }) => {
-  const history = useNavigate();
-  useEffect(() => {
-    checkAuth().then(res => {
-      handleUserState(res);
-      if (!res.isAuth) {
-        localStorage.removeItem('userId');
-        localStorage.removeItem('userEmail');
-        localStorage.removeItem('userName');
-        return history('/login');
-      };
-    })
-    .catch(err => {
-      localStorage.removeItem('userId');
-      localStorage.removeItem('userEmail');
-      localStorage.removeItem('userName');
-      handleUserState(null); 
-      throw err 
-    })
-  })
+const Unauthorized = () => (
+  <Container maxWidth="lg">
+    <Box sx={{ position: 'relative' }}>
+      <Box sx={{
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
+        mt: 8
+      }} >
+        <h1>Unauthorized</h1>
+      </Box>
+    </Box>
+  </Container>
+)
 
-  return userState ? children : <UnauthorizedComponent />
+const ProtectedComponent = ({ children }) => {
+  const history = useNavigate();
+  const { user, checkAuthStatus, loading } = useUser();
+
+  useEffect(() => {
+    checkAuthStatus();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  useEffect(() => {
+    if (loading) return;
+    if (!user) {
+      history('/login');
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [loading])
+
+  return loading ? <LoadingScreen /> : user ? children : <Unauthorized />
 };
 
 export default ProtectedComponent;

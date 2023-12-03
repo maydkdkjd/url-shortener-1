@@ -8,6 +8,7 @@ import { Close as CloseIcon } from '@mui/icons-material'
 
 import { useNavigate, NavLink } from 'react-router-dom';
 import { LogoLarge } from '../components/Logo';
+import { API_URL } from '../config/config';
 
 export function SignUp() {
   const [firstName, setFirstName] = useState('');
@@ -19,7 +20,7 @@ export function SignUp() {
 
   const history = useNavigate();
   const register = async (user) => {
-    const response = await fetch(`http://localhost:5000/users/register`, {
+    const response = await fetch(`${API_URL}/users/register`, {
       method: 'POST',
       body: JSON.stringify(user),
       headers: {

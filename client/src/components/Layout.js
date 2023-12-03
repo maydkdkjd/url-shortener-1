@@ -4,8 +4,7 @@ import { Box } from '@mui/system'
 import { createTheme, ThemeProvider } from '@mui/material'
 import { CssBaseline } from '@mui/material'
 
-const Layout = ({ children, user, handleLogout }) => {
-
+const Layout = ({ children }) => {
   const theme = createTheme({
     palette: {
       mode: 'light',
@@ -19,8 +18,8 @@ const Layout = ({ children, user, handleLogout }) => {
   return (
     <ThemeProvider theme={theme}>
       <Box className='layout-component'>
-      <CssBaseline />
-        <Navigation user={user} logoutUser={handleLogout} />
+        <CssBaseline />
+        <Navigation />
         <Box component='main' className='main-component-wrapper' sx={{
           pt: 12,
           pb: 4,

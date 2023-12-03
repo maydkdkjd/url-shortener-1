@@ -9,6 +9,8 @@ import EditIcon from '@mui/icons-material/Edit';
 import SaveIcon from '@mui/icons-material/Save';
 import CancelIcon from '@mui/icons-material/Cancel';
 import { ReactComponent as Spinner } from '../media/spinner.svg'
+import useUser from "../contexts/user";
+import { API_URL } from "../config/config";
 
 const UrlRow = ({ url, shortUrl, lastModified, deleteUrl, updateUrl }) => {
   const [edit, setEdit] = useState(false);
@@ -31,14 +33,14 @@ const UrlRow = ({ url, shortUrl, lastModified, deleteUrl, updateUrl }) => {
 
   return (
     <TableRow key={shortUrl}>
-      <TableCell sx={{whiteSpace: 'pre'}}>
+      <TableCell sx={{ whiteSpace: 'pre' }}>
         {new Date(lastModified).toLocaleString('en-IN', {
           timeStyle: "medium", dateStyle: "medium"
         })}
       </TableCell>
       <TableCell sx={{ maxWidth: 266, maskImage: 'linear-gradient(90deg,transparent,#fff 16px,#fff 90%,transparent)' }}>
         {!edit ? (
-          <Link href={`${url}`} target="_blank" rel="noreferrer" sx={{whiteSpace: 'pre'}}>
+          <Link href={`${url}`} target="_blank" rel="noreferrer" sx={{ whiteSpace: 'pre' }}>
             {url}
           </Link>
         ) : (
@@ -51,8 +53,8 @@ const UrlRow = ({ url, shortUrl, lastModified, deleteUrl, updateUrl }) => {
         )}
       </TableCell>
       <TableCell>
-        <Link href={`http://localhost:5000/u/${shortUrl}`} target="_blank" rel="noreferrer">
-          {`http://localhost:5000/u/${shortUrl}`}
+        <Link href={`${API_URL}/u/${shortUrl}`} target="_blank" rel="noreferrer">
+          {`${API_URL}/u/${shortUrl}`}
         </Link>
       </TableCell>
       <TableCell sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'center' }} align="center">
@@ -77,14 +79,15 @@ const UrlRow = ({ url, shortUrl, lastModified, deleteUrl, updateUrl }) => {
   )
 }
 
-const Dashboard = ({ user }) => {
+const Dashboard = () => {
+  const { user } = useUser();
   const [url, setUrl] = useState('');
   const [rows, setRows] = useState([]);
   const [loading, setLoading] = useState(true);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    fetch('http://localhost:5000/urls/add', {
+    fetch(`${API_URL}/urls/add`, {
       method: "POST",
       credentials: "include",
       body: JSON.stringify({ targetUrl: url }),
@@ -104,7 +107,7 @@ const Dashboard = ({ user }) => {
 
   const fetchUrls = () => {
     setLoading(true);
-    fetch(`http://localhost:5000/urls/${user.id}`)
+    fetch(`${API_URL}/urls/${user.id}`)
       .then(res => res.json())
       .then(jsonRes => {
         setRows(jsonRes);
@@ -116,11 +119,11 @@ const Dashboard = ({ user }) => {
   }
 
   const updateUrl = (shortUrl, url) =>
-    fetch(`http://localhost:5000/urls/update`, {
+    fetch(`${API_URL}/urls/update`, {
       method: 'POST',
-      body: JSON.stringify({ 
-        shortUrl: shortUrl, 
-        url: url, 
+      body: JSON.stringify({
+        shortUrl: shortUrl,
+        url: url,
       }),
       credentials: 'include',
       headers: {
@@ -135,7 +138,7 @@ const Dashboard = ({ user }) => {
       })
 
   const deleteUrl = (shortUrl) => {
-    fetch(`http://localhost:5000/urls/delete`, {
+    fetch(`${API_URL}/urls/delete`, {
       method: 'POST',
       body: JSON.stringify({ shortUrl: shortUrl }),
       credentials: 'include',
@@ -154,6 +157,7 @@ const Dashboard = ({ user }) => {
 
   useEffect(() => {
     fetchUrls();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (
@@ -215,34 +219,6 @@ const Dashboard = ({ user }) => {
               Nothing here yet. Your shortened URLs will appear here
             </Typography>
           )}
-            
-          {/* {rows.length ? (
-            <TableContainer>
-              <Table sx={{ minWidth: 650 }} aria-label="simple table">
-                <TableHead>
-                  <TableRow>
-                    <TableCell sx={{ fontWeight: 700, fontFamily: 'monospace', color: '#333' }} align="left">Last Modified</TableCell>
-                    <TableCell sx={{ fontWeight: 700, fontFamily: 'monospace', color: '#333' }} align="left">URL</TableCell>
-                    <TableCell sx={{ fontWeight: 700, fontFamily: 'monospace', color: '#333' }} align="left">Short URL</TableCell>
-                    <TableCell sx={{ fontWeight: 700, fontFamily: 'monospace', color: '#333' }} align="center" width="200px">Manage</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {rows.map(row => (
-                    <UrlRow {...row} key={row.shortUrl}
-                      deleteUrl={deleteUrl}
-                      updateUrl={updateUrl}
-                    />
-                  ))}
-                </TableBody>
-
-              </Table>
-            </TableContainer>
-          ) : (
-            <Typography variant="body2">
-              Nothing here yet. Your shortened URLs will appear here
-            </Typography>
-          )} */}
         </Paper>
       </Container>
     </Box>

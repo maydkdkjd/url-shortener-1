@@ -10,12 +10,15 @@ import CloseIcon from '@mui/icons-material/Close';
 import { loginUser } from '../helpers/helpers';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { LogoLarge } from '../components/Logo';
+import useUser from '../contexts/user';
 
-export function Login({ handleUser }) {
+export function Login() {
   const history = useNavigate();
   const [errorMsg, setErrorMsg] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+
+  const { login } = useUser();
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -28,19 +31,15 @@ export function Login({ handleUser }) {
 
     loginUser(user).then(res => {
       if (res.isAuth) {
-        handleUser(res);
+        login(res);
         history('/');
-      } else {
-        setErrorMsg(res.message);
-        setEmail('');
-        setPassword('');
       }
     })
-      .catch(err => { throw err });
+      .catch(err => { setErrorMsg(err) });
   };
 
   useEffect(() => {
-    if (errorMsg.length > 0) {
+    if (errorMsg?.length > 0) {
       setTimeout(() => {
         setErrorMsg('');
       }, 5000)
@@ -64,7 +63,7 @@ export function Login({ handleUser }) {
         </Typography>
         <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1 }}>
 
-          <Collapse in={errorMsg.length !== 0}>
+          <Collapse in={errorMsg?.length !== 0}>
             <Alert
               severity='error'
               variant='outlined'

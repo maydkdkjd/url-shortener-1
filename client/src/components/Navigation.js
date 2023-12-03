@@ -9,6 +9,7 @@ import { Box } from "@mui/system";
 import { Logo } from "./Logo";
 
 import { AccountCircle as UserIcon, Logout as LogoutIcon } from '@mui/icons-material'
+import useUser from "../contexts/user";
 
 const NavBox = ({ children }) => (
   <Box sx={{ flexGrow: 1, display: "flex" }}>
@@ -16,8 +17,9 @@ const NavBox = ({ children }) => (
   </Box>
 )
 
-const Navigation = ({ logoutUser, user }) => {
+const Navigation = () => {
   const [anchorElUser, setAnchorElUser] = React.useState(null);
+  const { user, logout } = useUser();
 
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
@@ -29,7 +31,7 @@ const Navigation = ({ logoutUser, user }) => {
 
   const handleLogout = () => {
     handleCloseUserMenu();
-    logoutUser();
+    logout();
   }
 
   return (
