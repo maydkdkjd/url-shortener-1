@@ -46,23 +46,14 @@ const registerNewUser = (user, res) =>
  * @param {Cb1} cb callback
  **/
 const findUserByToken = (token, cb) => {
-  if (!token) {
-    console.log('token is null')
-    return cb(null, null);
-  }
+  if (!token) return cb(null, null);
   jwt.verify(token, SECRET, (err, decode) => {
-    if (!decode) {
-      console.log('decode is null');
-      return cb(null, null);
-    }
+    if (!decode) return cb(null, null);
 
     getDb().collection('logged_in_users').findOne({
       userId: decode.id, token: token
     })
-      .then(user => {
-        console.log('user by token: ', user);
-        return cb(null, user);
-      })
+      .then(user => cb(null, user))
       .catch(err => cb(err));
   })
 }

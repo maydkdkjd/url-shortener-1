@@ -10,7 +10,6 @@ import SaveIcon from '@mui/icons-material/Save';
 import CancelIcon from '@mui/icons-material/Cancel';
 import { ReactComponent as Spinner } from '../media/spinner.svg'
 import useUser from "../contexts/user";
-import { API_URL } from "../config/config";
 
 const UrlRow = ({ url, shortUrl, lastModified, deleteUrl, updateUrl }) => {
   const [edit, setEdit] = useState(false);
@@ -53,8 +52,8 @@ const UrlRow = ({ url, shortUrl, lastModified, deleteUrl, updateUrl }) => {
         )}
       </TableCell>
       <TableCell>
-        <Link href={`${API_URL}/u/${shortUrl}`} target="_blank" rel="noreferrer">
-          {`${API_URL}/u/${shortUrl}`}
+        <Link href={`/u/${shortUrl}`} target="_blank" rel="noreferrer">
+          {`/u/${shortUrl}`}
         </Link>
       </TableCell>
       <TableCell sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'center' }} align="center">
@@ -87,7 +86,7 @@ const Dashboard = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    fetch(`${API_URL}/urls/add`, {
+    fetch(`/urls/add`, {
       method: "POST",
       credentials: "include",
       body: JSON.stringify({ targetUrl: url }),
@@ -107,7 +106,7 @@ const Dashboard = () => {
 
   const fetchUrls = useCallback(() => {
     setLoading(true);
-    fetch(`${API_URL}/urls/${user.id}`)
+    fetch(`/urls/${user.id}`)
       .then(res => res.json())
       .then(jsonRes => {
         setRows(jsonRes);
@@ -119,7 +118,7 @@ const Dashboard = () => {
   }, [setLoading, setRows, user])
 
   const updateUrl = (shortUrl, url) =>
-    fetch(`${API_URL}/urls/update`, {
+    fetch(`/urls/update`, {
       method: 'POST',
       body: JSON.stringify({
         shortUrl: shortUrl,
@@ -138,7 +137,7 @@ const Dashboard = () => {
       })
 
   const deleteUrl = (shortUrl) => {
-    fetch(`${API_URL}/urls/delete`, {
+    fetch(`/urls/delete`, {
       method: 'POST',
       body: JSON.stringify({ shortUrl: shortUrl }),
       credentials: 'include',

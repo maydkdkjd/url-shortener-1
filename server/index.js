@@ -1,16 +1,12 @@
 const express = require('express');
 require('dotenv').config();
-const cors = require('cors');
 const cookies = require('cookie-parser');
+const path = require('path')
 
 const app = express();
 
 const dbo = require('./conn');
 
-app.use(cors({
-  origin: process.env.ALLOWED_CROSS_ORIGINS.split(' '),
-  credentials: true
-}))
 app.use(cookies());
 app.use(express.json());
 
@@ -22,6 +18,12 @@ app.listen(port, () => {
   console.log(`URL shortener server listening on port ${port}`);
 });
 
-// routes
+// API routes
 app.use(require('./routes/urls'));
 app.use(require('./routes/users'));
+
+// react frontend
+app.use(express.static(path.join(__dirname, '..', 'build')));
+app.use((req, res, next) => {
+  res.sendFile(path.join(__dirname, '..', 'build', 'index.html'));
+})

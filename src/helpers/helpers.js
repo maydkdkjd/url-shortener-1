@@ -1,6 +1,4 @@
-import { API_URL } from "../config/config"
-
-const checkAuth = () => fetch(`${API_URL}/users/auth`, {
+const checkAuth = () => fetch(`/users/auth`, {
   method: 'POST',
   credentials: 'include',
   body: '',
@@ -14,7 +12,7 @@ const checkAuth = () => fetch(`${API_URL}/users/auth`, {
  * @param {Object} user
  * @returns {Promise} Server response json
  */
-const loginUser = (user) => fetch(`${API_URL}/users/login`, {
+const loginUser = (user) => fetch(`/users/login`, {
   method: 'POST',
   body: JSON.stringify(user),
   credentials: "include",
@@ -23,7 +21,7 @@ const loginUser = (user) => fetch(`${API_URL}/users/login`, {
   },
 }).then(res => res.json())
 
-const logoutUser = (user) => fetch(`${API_URL}/users/logout`, {
+const logoutUser = (user) => fetch(`/users/logout`, {
   method: 'GET',
   credentials: "include",
   headers: {
