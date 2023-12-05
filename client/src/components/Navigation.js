@@ -1,5 +1,6 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
+import { ReactComponent as Spinner } from '../media/spinner.svg'
 
 import {
   AppBar, Toolbar, Container, Typography, Menu, MenuItem, Button, IconButton,
@@ -19,7 +20,7 @@ const NavBox = ({ children }) => (
 
 const Navigation = () => {
   const [anchorElUser, setAnchorElUser] = React.useState(null);
-  const { user, logout } = useUser();
+  const { user, loading, logout } = useUser();
 
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
@@ -44,8 +45,15 @@ const Navigation = () => {
           <Logo display='desktop' />
           <NavBox>
           </NavBox>
-
-          {user ? (
+          {loading ? (
+            <Button disabled component={NavLink} variant='outlined' to='/login'>
+              <Spinner width={24} height={24} />
+            </Button>
+          ) : !user ? (
+            <Button component={NavLink} variant='outlined' to='/login'>
+              <Typography textAlign="center">Login</Typography>
+            </Button>
+          ) : (
             <Box sx={{ flexGrow: 0 }}>
               <Tooltip title="Profile">
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
@@ -54,7 +62,6 @@ const Navigation = () => {
                   </Avatar>
                 </IconButton>
               </Tooltip>
-
               <Menu
                 sx={{ mt: '45px' }}
                 id="menu-appbar"
@@ -85,10 +92,6 @@ const Navigation = () => {
                 </MenuItem>
               </Menu>
             </Box>
-          ) : (
-            <Button component={NavLink} variant='outlined' to='/login'>
-              <Typography textAlign="center">Login</Typography>
-            </Button>
           )}
         </Toolbar>
       </Container>

@@ -2,7 +2,7 @@ import { Paper, Typography, Button, TextField, Link } from "@mui/material";
 import { Box, Container } from "@mui/system";
 
 import { TableContainer, Table, TableHead, TableRow, TableCell, TableBody } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
@@ -105,7 +105,7 @@ const Dashboard = () => {
       })
   }
 
-  const fetchUrls = () => {
+  const fetchUrls = useCallback(() => {
     setLoading(true);
     fetch(`${API_URL}/urls/${user.id}`)
       .then(res => res.json())
@@ -116,7 +116,7 @@ const Dashboard = () => {
       .catch(err => {
         console.log(err);
       })
-  }
+  }, [setLoading, setRows, user])
 
   const updateUrl = (shortUrl, url) =>
     fetch(`${API_URL}/urls/update`, {
@@ -157,8 +157,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     fetchUrls();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [fetchUrls])
 
   return (
     <Box>

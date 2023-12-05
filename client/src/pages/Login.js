@@ -35,7 +35,7 @@ export function Login() {
         history('/');
       }
     })
-      .catch(err => { setErrorMsg(err) });
+      .catch(err => { console.log(err) });
   };
 
   useEffect(() => {
@@ -63,7 +63,7 @@ export function Login() {
         </Typography>
         <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1 }}>
 
-          <Collapse in={errorMsg?.length !== 0}>
+          <Collapse in={errorMsg.length !== 0}>
             <Alert
               severity='error'
               variant='outlined'
