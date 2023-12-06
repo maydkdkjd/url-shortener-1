@@ -1,10 +1,13 @@
-const { MongoClient } = require('mongodb');
+const { MongoClient, ServerApiVersion } = require('mongodb');
 const Db = process.env.DB_URI;
 const dbName = process.env.DB_NAME || 'urlshortenerdb';
 
 const client = new MongoClient(Db, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
+  serverApi: {
+    version: ServerApiVersion.v1,
+    strict: true,
+    deprecationErrors: true
+  }
 });
 
 /** @type {import('mongodb').Db} */

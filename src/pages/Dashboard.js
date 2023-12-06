@@ -1,15 +1,13 @@
-import { Paper, Typography, Button, TextField, Link } from "@mui/material";
-import { Box, Container } from "@mui/system";
-
-import { TableContainer, Table, TableHead, TableRow, TableCell, TableBody } from "@mui/material";
 import React, { useCallback, useEffect, useState } from "react";
-
+import { Paper, Typography, Button, TextField, Link, TableContainer, Table, TableHead, TableRow, TableCell, TableBody } from "@mui/material";
+import { Box, Container } from "@mui/system";
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import SaveIcon from '@mui/icons-material/Save';
 import CancelIcon from '@mui/icons-material/Cancel';
 import { ReactComponent as Spinner } from '../media/spinner.svg'
 import useUser from "../contexts/user";
+import { serverUrl } from '../config/config';
 
 const UrlRow = ({ url, shortUrl, lastModified, deleteUrl, updateUrl }) => {
   const [edit, setEdit] = useState(false);
@@ -52,8 +50,8 @@ const UrlRow = ({ url, shortUrl, lastModified, deleteUrl, updateUrl }) => {
         )}
       </TableCell>
       <TableCell>
-        <Link href={`/u/${shortUrl}`} target="_blank" rel="noreferrer">
-          {`/u/${shortUrl}`}
+        <Link href={`${serverUrl}/u/${shortUrl}`} target="_blank" rel="noreferrer">
+          {`${serverUrl}/u/${shortUrl}`}
         </Link>
       </TableCell>
       <TableCell sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'center' }} align="center">
@@ -155,6 +153,7 @@ const Dashboard = () => {
   }
 
   useEffect(() => {
+    console.log(serverUrl);
     fetchUrls();
   }, [fetchUrls])
 
